@@ -6,6 +6,8 @@ public class DetalleOrden {
 	private double cantidad;
 	private double precio;
 	private double total;
+	private double totall;
+	
 	
 	public DetalleOrden() {
 		// TODO Auto-generated constructor stub
