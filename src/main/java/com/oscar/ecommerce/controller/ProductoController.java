@@ -1,5 +1,6 @@
 package com.oscar.ecommerce.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -11,10 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oscar.ecommerce.model.Producto;
 import com.oscar.ecommerce.model.Usuario;
 import com.oscar.ecommerce.service.ProductoService;
+import com.oscar.ecommerce.service.UploadFileService;
 
 @Controller
 @RequestMapping("/productos")
@@ -25,6 +29,10 @@ public class ProductoController {
 	
 	@Autowired
 	private ProductoService productoService;
+	
+	//Autowired esto srive para inyectar a la clase productoController
+	@Autowired
+	private UploadFileService upload;
 	
 	
 	@GetMapping("")
@@ -40,12 +48,35 @@ public class ProductoController {
 	
 	//Metdo Guardar
 	@PostMapping("/save")
-	public String save(Producto producto) {
+	//El parametro producto si tiene todos sus campos del formulario de obj producto
+	//La imagen no la tiene asi que se le agrega una notacion @RequestParam y lo traera desde el atributo img, este atributo esta en create.html
+	
+	public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
 		//La apertura de llaves es una especie de format, el cual le decimos que va a venir una variable o un objeto
 		//Con lo ya dicho de arriba tambien me sirve para verlo en consola como si fue se un system.out.....
 		LOGGER.info("Este es el objeto producto {}", producto);
 		Usuario u= new Usuario(1, "", "", "", "", "", "", "");
 		producto.setUsuario(u);
+		
+		//imagen
+		//Esta validacion es cuando se crea un producto por primera vez
+		if (producto.getId()==null) {
+			String nombreImagen=upload.saveImage(file);
+			//Con esto ya se guarda en el campo images
+			//Aqui lo que se esta pasando es al obj producto que este ya lo guarda todos los campos que vienen para ese obj
+			producto.setImagen(nombreImagen);
+		}else {
+			//Esta condicion es cuando editamos el producto pero no se cambia la imagen
+			if (file.isEmpty()) {
+				Producto p=new Producto();
+					p=productoService.get(producto.getId()).get();
+				    producto.setImagen(p.getImagen());
+			}else {
+				String nombreImagen=upload.saveImage(file);
+				producto.setImagen(nombreImagen);
+			}
+		}
+		
 		productoService.save(producto);
 		//redirect es una peticion, directamente a nuestro controlador productos
 		//Y basicamente lo que va cargar es la vista show
