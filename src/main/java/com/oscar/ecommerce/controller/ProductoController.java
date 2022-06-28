@@ -1,11 +1,14 @@
 package com.oscar.ecommerce.controller;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,6 +38,7 @@ public class ProductoController {
 		return "productos/create";
 	}
 	
+	//Metdo Guardar
 	@PostMapping("/save")
 	public String save(Producto producto) {
 		//La apertura de llaves es una especie de format, el cual le decimos que va a venir una variable o un objeto
@@ -46,8 +50,25 @@ public class ProductoController {
 		//redirect es una peticion, directamente a nuestro controlador productos
 		//Y basicamente lo que va cargar es la vista show
 		return "redirect:/productos";
+		
+		}
+	
+	    //Metodo Acutalizar
+	    //PathVariable sirve para mapear la variable que viene en la url en este caso es id
+			@GetMapping("/edit/{id}")
+			public String edit(@PathVariable Integer id, Model model) {
+				Producto producto= new Producto();
+				Optional<Producto> optionalproducto = productoService.get(id);
+				producto = optionalproducto.get();
+				
+				LOGGER.info("Producto buscado: {}",producto);
+				model.addAttribute("producto", producto);
+				return "productos/edit";
 	}
-	
-	
+	@PostMapping("/update")
+	public String update(Producto producto) {
+		productoService.update(producto);
+		return "redirect:/productos";
+	}
 
 }
