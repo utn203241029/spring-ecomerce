@@ -1,5 +1,7 @@
 package com.oscar.ecommerce.controller;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.oscar.ecommerce.model.Producto;
 import com.oscar.ecommerce.service.ProductoService;
 
 @Controller
@@ -31,9 +34,15 @@ public class HomeController {
 	
 	//El siguiente metodo tiene como funcion es llevarnos ver producto
                //Le colocamos id para buscarlo por su id del producto	
-	@GetMapping("productohome/{id}")
-	public String productoHome(@PathVariable Integer id) {
+	@GetMapping("productohome/{id}")                     //Model nos permite llevar informacion hacia la vista
+	public String productoHome(@PathVariable Integer id, Model model) {
 		log.info("id producto enviado como parametro {}", id);
+		Producto producto = new Producto();
+		Optional<Producto>productoOptional = productoService.get(id);
+		producto= productoOptional.get();
+		
+		//Ahora se envia hacia la vista
+		model.addAttribute("producto", producto);
 		return "usuario/productohome";
 	}
 	
