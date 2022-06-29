@@ -1,5 +1,8 @@
 package com.oscar.ecommerce.controller;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -11,7 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.oscar.ecommerce.model.DetalleOrden;
+import com.oscar.ecommerce.model.Orden;
 import com.oscar.ecommerce.model.Producto;
 import com.oscar.ecommerce.service.ProductoService;
 
@@ -23,6 +29,12 @@ public class HomeController {
 	//private se refiere a nivel de clase
 	@Autowired
 	private ProductoService productoService ;
+	
+	//Esto es para almacenar los detalles de la orden
+	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
+	
+	//Datos de la orden
+	Orden orden = new Orden();
 	
 	@GetMapping("")
 	public String home(Model model) {
@@ -47,8 +59,35 @@ public class HomeController {
 		return "usuario/productohome";
 	}
 	//carrito
+	
 	@PostMapping("/cart")
-	public String addCart() {
+	public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
+		DetalleOrden detalleOrden = new DetalleOrden();
+		Producto producto = new Producto();
+		//Esta variabe sirve para cuando un usario compre otro producto se inicie desde 0
+		double sumaTotal=0;
+		
+		//ahora queda buscar nuestro producto
+		Optional<Producto> optionalProducto = productoService.get(id);
+		log.info("Producto añadido: {}", optionalProducto.get());
+		log.info("Cantidad: {}", cantidad);
+		
+		producto=optionalProducto.get();
+		
+		detalleOrden.setCantidad(cantidad);
+		detalleOrden.setPrecio(producto.getPrecio());
+		detalleOrden.setNombre(producto.getNombre());
+		detalleOrden.setTotal(producto.getPrecio()*cantidad);
+		detalleOrden.setProducto(producto);
+		
+		detalles.add(detalleOrden);
+		
+		//suma todos los totales que tenemos en la lista
+		sumaTotal=detalles.stream().mapToDouble(dt->dt.getTotal()).sum();
+		
+		orden.setTotal(sumaTotal);
+		model.addAttribute("cart", detalles);
+		model.addAttribute("orden", orden);
 		
 		return "usuario/carrito";
 	}
