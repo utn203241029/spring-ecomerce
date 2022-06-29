@@ -66,15 +66,7 @@ public class ProductoController {
 			//Aqui lo que se esta pasando es al obj producto que este ya lo guarda todos los campos que vienen para ese obj
 			producto.setImagen(nombreImagen);
 		}else {
-			//Esta condicion es cuando editamos el producto pero no se cambia la imagen
-			if (file.isEmpty()) {
-				Producto p=new Producto();
-					p=productoService.get(producto.getId()).get();
-				    producto.setImagen(p.getImagen());
-			}else {
-				String nombreImagen=upload.saveImage(file);
-				producto.setImagen(nombreImagen);
-			}
+			
 		}
 		
 		productoService.save(producto);
@@ -97,12 +89,38 @@ public class ProductoController {
 				return "productos/edit";
 	}
 	@PostMapping("/update")
-	public String update(Producto producto) {
+	public String update(Producto producto,  @RequestParam("img") MultipartFile file) throws IOException {
+		Producto p=new Producto();
+		p=productoService.get(producto.getId()).get();
+		
+		//Esta condicion es cuando editamos el producto pero no se cambia la imagen
+		if (file.isEmpty()) {
+			
+			    producto.setImagen(p.getImagen());
+		}else {
+			//Cuando se edita la imagen siempre y cuando no sea la de por defecto		
+			if (!p.getImagen().equals("default.jpg")) {
+				upload.deleteImage(p.getImagen());
+			}
+		String nombreImagen = upload.saveImage(file);
+		producto.setImagen(nombreImagen);
+		}
+		
+		producto.setUsuario(p.getUsuario());
 		productoService.update(producto);
 		return "redirect:/productos";
 	}
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable Integer id) {
+		
+		Producto p= new Producto();
+		p=productoService.get(id).get();
+		
+		//Se elimira la img cuando la misma no sea por defecto
+		if (!p.getImagen().equals("default.jpg")) {
+			upload.deleteImage(p.getImagen());
+		}
+		
 		productoService.delete(id);
 		return "redirect:/productos";
 	}
