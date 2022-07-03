@@ -33,6 +33,7 @@ public class HomeController {
 	//Esto es para almacenar los detalles de la orden
 	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
 	
+	//Detalles y Orden son globales en esta clase
 	//Datos de la orden
 	Orden orden = new Orden();
 	
@@ -77,10 +78,21 @@ public class HomeController {
 		detalleOrden.setCantidad(cantidad);
 		detalleOrden.setPrecio(producto.getPrecio());
 		detalleOrden.setNombre(producto.getNombre());
-		detalleOrden.setTotal(producto.getPrecio()*cantidad);
+		detalleOrden.setTotal(producto.getPrecio() * cantidad);
 		detalleOrden.setProducto(producto);
 		
-		detalles.add(detalleOrden);
+		//Validar que producto no se añada dos veces 
+		//Ejemplo aqui viene el id con 5
+		Integer idProducto=producto.getId();
+		                  //En lasta detalles ya un id con 5 y de tal forma no se ingrese productos con el mismo id
+		                                    //es como un for
+		boolean ingresado= detalles.stream().anyMatch(p -> p.getProducto().getId()==idProducto);
+		
+		//Si esto no es true lo añade a detallesOrden
+		//Y si es true no lo añade
+		if (!ingresado) {
+			detalles.add(detalleOrden);
+		}
 		
 		//suma todos los totales que tenemos en la lista
 		sumaTotal=detalles.stream().mapToDouble(dt->dt.getTotal()).sum();
@@ -121,6 +133,15 @@ public class HomeController {
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
 		
+		
+		return "usuario/carrito";
+	}
+	
+	@GetMapping("/getCart")
+	public String getCart(Model model) {
+		
+		model.addAttribute("cart", detalles);
+		model.addAttribute("orden", orden);
 		
 		return "usuario/carrito";
 	}
