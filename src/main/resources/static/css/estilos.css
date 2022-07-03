@@ -1,0 +1,170 @@
+/*.logotipo{
+  color: #111113e0;
+}
+
+/*{
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  background: #F1F1F1;
+  font-family: 'Roboto', sans-serif;
+  -webkit-transition: .3s ease all;
+  transition: .3s ease all;
+}
+
+body.dark {
+  background: #111111;
+}
+li{
+  color: black;
+}
+
+a li{
+  color: #0c0c0c;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.container{
+  max-width: 1000px;
+  width: 90%;
+  margin: auto;
+  padding: 50px 0;
+}
+
+nav {
+  background: #f3eeee;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 15px 20px;
+  border-radius: 5px;
+  -webkit-transition: .3s ease all;
+  transition: .3s ease all;
+  -webkit-box-shadow: 10px 10px 20px rgba(170, 170, 170, 0.16);
+          box-shadow: 10px 10px 20px rgba(170, 170, 170, 0.16);
+}
+
+body.dark nav {
+  background: #222222;
+  -webkit-box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.16);
+          box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.16);
+}
+
+body.dark nav a {
+  color: #C8C8C8;
+}
+
+body.dark nav a:hover {
+  color: #FEFEFE;
+}
+
+nav .logotipo {
+  font-weight: 700;
+  font-family: 'Roboto', sans-serif;
+}
+
+nav .enlaces{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+nav .enlaces a  {
+  margin-right: 40px;
+}
+
+.nav .enlaces a:hover {
+  color: #707070;
+}
+
+
+.grid {
+  display: -ms-grid;
+  display: grid;
+  grid-gap: 40px 20px;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  padding: 40px 0;
+}
+
+.grid .card {
+  background: #FEFEFE;
+  padding: 20px;
+  border-radius: 5px;
+  -webkit-box-shadow: 10px 10px 20px rgba(170, 170, 170, 0.16);
+          box-shadow: 10px 10px 20px rgba(170, 170, 170, 0.16);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  position: relative;
+  min-height: 195px;
+  margin-top: 50px;
+  -webkit-transition: .3s ease all;
+  transition: .3s ease all;
+}
+
+body.dark .grid .card {
+  background: #222222;
+  -webkit-box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.16);
+          box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.16);
+}
+
+.grid .card img {
+  vertical-align: top;
+  border-radius: 7px;
+  position: absolute;
+  top: -50px;
+  width: calc(100% - 40px);
+  max-height: 165px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.botones .boton{
+  padding: 10px;
+  color: #fff;
+  width: 100%;
+  display: block;
+  background: #111111;
+  text-align: center;
+  border-radius: 5px;
+  -webkit-transition: .3s ease all;
+  transition: .3s ease all;
+}
+
+.botones .boton:hover{
+  background: #254BE6;
+}
+
+.botonb{
+  padding: 1px;
+  color: #fff;
+  width: 19.5%;
+  display: block;
+  background: #111111;
+  border-radius: 5px;
+  -webkit-transition: .3s ease all;
+  transition: .3s ease all;
+}
+
+.botonb{
+  background: #1a1b1b;
+}
+*/
