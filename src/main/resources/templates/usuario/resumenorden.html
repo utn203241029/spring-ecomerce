@@ -49,12 +49,12 @@
         <div class="row">
           <div class="col-lg-9">
             <div class="card-body">
-              <h5 class="card-title">
+              <h5class="card-title">
                 DATOS ORDEN
-              </h5>
-              <h6>Nombre: </h6>
-              <h6>Correo: </h6>
-              <h6>Dirección</h6>
+              </h5 >
+              <h6 th:text="'Nombre: ' + ${usuario.nombre}"></h6>
+              <h6 th:text="'Correo: ' +  ${usuario.email}">Correo: </h6>
+              <h6 th:text="'Direccion: ' + ${usuario.direccion}">Dirección</h6>
 
               <h5 class="card-title">
                 PRODUCTOS
@@ -70,11 +70,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Nombre</td>
-                      <td>Precio</td>
-                      <td>Cantidad</td>
-                      <td>Total</td>
+                    <tr th:each="dtorden:${cart}">
+                      <td th:text="${dtorden.nombre}"></td>
+                      <td th:text="${dtorden.precio}"></td>
+                      <td th:text="${dtorden.cantidad}"></td>
+                      <td th:text="${dtorden.total}">Total</td>
 
                     </tr>
                   </tbody>
@@ -90,7 +90,7 @@
 
             <ul class="list-group">
               <li class="list-group-item">
-                <h5> Total:</h5>
+                <h5 th:text=" 'Total: ' + ${orden.total}"> Total:</h5>
               </li>
               <a href="#" class="btn btn-dark">Generar</a>
             </ul>

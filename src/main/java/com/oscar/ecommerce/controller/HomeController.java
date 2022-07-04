@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.oscar.ecommerce.model.DetalleOrden;
 import com.oscar.ecommerce.model.Orden;
 import com.oscar.ecommerce.model.Producto;
+import com.oscar.ecommerce.model.Usuario;
+import com.oscar.ecommerce.service.IUsuarioService;
 import com.oscar.ecommerce.service.ProductoService;
+import com.oscar.ecommerce.service.UsuarioServiceImp;
 
 @Controller
 @RequestMapping("/")//aqui va aputar a la raiz del proyecto
@@ -29,6 +32,9 @@ public class HomeController {
 	//private se refiere a nivel de clase
 	@Autowired
 	private ProductoService productoService ;
+	
+	@Autowired
+	private IUsuarioService usuarioService; 
 	
 	//Esto es para almacenar los detalles de la orden
 	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
@@ -147,8 +153,13 @@ public class HomeController {
 	}
 	
 	@GetMapping("/order")
-	public String order() {
+	public String order(Model model) {
 		
+		Usuario usuario = usuarioService.findById(1).get();
+		
+		model.addAttribute("cart", detalles);
+		model.addAttribute("orden", orden);
+		model.addAttribute("usuario", usuario);
 		return "usuario/resumenorden";
 	}
 
