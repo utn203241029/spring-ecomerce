@@ -2,6 +2,7 @@ package com.oscar.ecommerce.controller;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +21,10 @@ import com.oscar.ecommerce.model.DetalleOrden;
 import com.oscar.ecommerce.model.Orden;
 import com.oscar.ecommerce.model.Producto;
 import com.oscar.ecommerce.model.Usuario;
+import com.oscar.ecommerce.service.IDetalleOrdenService;
+import com.oscar.ecommerce.service.IOrdenService;
 import com.oscar.ecommerce.service.IUsuarioService;
 import com.oscar.ecommerce.service.ProductoService;
-import com.oscar.ecommerce.service.UsuarioServiceImp;
 
 @Controller
 @RequestMapping("/")//aqui va aputar a la raiz del proyecto
@@ -35,6 +37,12 @@ public class HomeController {
 	
 	@Autowired
 	private IUsuarioService usuarioService; 
+	
+	@Autowired
+	private IOrdenService ordenService;
+	
+	@Autowired
+	private IDetalleOrdenService detalleOrdenService;
 	
 	//Esto es para almacenar los detalles de la orden
 	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
@@ -161,6 +169,35 @@ public class HomeController {
 		model.addAttribute("orden", orden);
 		model.addAttribute("usuario", usuario);
 		return "usuario/resumenorden";
+	}
+	
+	//Guardan Orden
+	@GetMapping("/saveOrder")
+	public String saveOrder() {
+		
+		//Nos va a permitir obtener la fecha acutual y la que se creo
+		Date fechaCreacion = new Date();
+		orden.setFechaCreacion(fechaCreacion);
+		orden.setNumero(ordenService.generarNumeroOrden());
+		
+		//usuario 
+		Usuario usuario = usuarioService.findById(1).get();
+		
+		orden.setUsuario(usuario);
+		ordenService.save(orden);
+		
+		//Guardar detalles
+		for(DetalleOrden dt:detalles) {
+			dt.setOrden(orden);
+			detalleOrdenService.save(dt);
+		}
+		
+		//limpiar para que si el usuario quiera seguir comprando
+		orden = new Orden();
+		detalles.clear();
+		
+		
+		return "redirect:/";
 	}
 
 }
