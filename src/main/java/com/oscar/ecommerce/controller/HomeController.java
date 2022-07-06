@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -198,6 +199,18 @@ public class HomeController {
 		
 		
 		return "redirect:/";
+	}
+	
+	@PostMapping("/search")
+	public String searchProduct(@RequestParam String nombre, Model model) {
+		log.info("Nombre del producto: {}", nombre);
+		                                          //findAll Se atrae todos los productos
+		                            //Obtiene todos los productos se le pasa un filter, se le pasa el predicado (p)
+		//el predicado es lo que queremos hacer y atra ves de la fecha trae el nombre de producto se la pasa la secuencia de caracteres y  sirve que uando se escriba que algun nombre parecido de un producto lo muestre
+		List<Producto> productos = productoService.findAll().stream().filter(p -> p.getNombre().toLowerCase().contains(nombre)).collect(Collectors.toList());
+		model.addAttribute("productos", productos);
+		
+		return "usuario/home";
 	}
 
 }
