@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,9 @@ public class HomeController {
 	Orden orden = new Orden();
 	
 	@GetMapping("")
-	public String home(Model model) {
+	public String home(Model model, HttpSession session) {
+		
+		log.info("Sesion del Usuario: {}", session.getAttribute("idusuario"));
 		
 		//findAll() trae todos los productos y nos lo pone en la variable "productos"
 		model.addAttribute("productos", productoService.findAll());
@@ -162,9 +166,9 @@ public class HomeController {
 	}
 	
 	@GetMapping("/order")
-	public String order(Model model) {
-		
-		Usuario usuario = usuarioService.findById(1).get();
+	public String order(Model model, HttpSession session) {
+		                                                                                           //Se le tiene que colocar un to String porque essto session.getAttribute("idusuario") es como un obejto
+		Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
@@ -174,7 +178,7 @@ public class HomeController {
 	
 	//Guardan Orden
 	@GetMapping("/saveOrder")
-	public String saveOrder() {
+	public String saveOrder(HttpSession session) {
 		
 		//Nos va a permitir obtener la fecha acutual y la que se creo
 		Date fechaCreacion = new Date();
@@ -182,7 +186,7 @@ public class HomeController {
 		orden.setNumero(ordenService.generarNumeroOrden());
 		
 		//usuario 
-		Usuario usuario = usuarioService.findById(1).get();
+		Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		
 		orden.setUsuario(usuario);
 		ordenService.save(orden);

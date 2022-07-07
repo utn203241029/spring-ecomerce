@@ -3,6 +3,8 @@ package com.oscar.ecommerce.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.oscar.ecommerce.model.Producto;
 import com.oscar.ecommerce.model.Usuario;
+import com.oscar.ecommerce.service.IUsuarioService;
 import com.oscar.ecommerce.service.ProductoService;
 import com.oscar.ecommerce.service.UploadFileService;
 
@@ -29,6 +32,9 @@ public class ProductoController {
 	
 	@Autowired
 	private ProductoService productoService;
+	
+	 @Autowired 
+	 private IUsuarioService usuarioService;
 	
 	//Autowired esto srive para inyectar a la clase productoController
 	@Autowired
@@ -51,11 +57,12 @@ public class ProductoController {
 	//El parametro producto si tiene todos sus campos del formulario de obj producto
 	//La imagen no la tiene asi que se le agrega una notacion @RequestParam y lo traera desde el atributo img, este atributo esta en create.html
 	
-	public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+	public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
 		//La apertura de llaves es una especie de format, el cual le decimos que va a venir una variable o un objeto
 		//Con lo ya dicho de arriba tambien me sirve para verlo en consola como si fue se un system.out.....
 		LOGGER.info("Este es el objeto producto {}", producto);
-		Usuario u= new Usuario(1, "", "", "", "", "", "", "");
+		
+		Usuario u= usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		producto.setUsuario(u);
 		
 		//imagen
