@@ -1,5 +1,9 @@
 package com.oscar.ecommerce.controller;
 
+import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,42 @@ public class UsuarioController {
 		 return "redirect:/";
 	 }
 	 
+	 //Vista del usuario
+	 @GetMapping("/login")
+	 public String login() {
+		 
+		 
+		 return "usuario/login";
+	 }
 	 
+	 @PostMapping("/acceder")                //Este objeto se mantiene durante toda la sesion
+	  public String acceder(Usuario usuario, HttpSession session) {
+		 logger.info("Accesos : {}", usuario); 
+		                                                //Se obtendra un usuario que tenga un email
+		 Optional<Usuario> user= usuarioService.findByEmail(usuario.getEmail());
+		 
+		 //logger.info("Usuario db: {} ", user.get());
+		 
+		 //Si un usuario esta presente 
+		 if(user.isPresent()) { //setAttribute nos permite poner dos parametros 1 Nombre 2 Valor
+			 //Aqui se guardara el id del usuario para poder utilizarlo en el resto de lugares que se ocupara en la aplicacion
+			 session.setAttribute("idusuario", user.get().getId());
+		     
+			 //Si el tipo es igual a ADMIN me lance a un lugar osea al administrador
+			 if (user.get().getTipo().equals("ADMIN")) {
+				return "redirect:/administrador";
+			
+				//Si no es ADMIN me direccione hacia la pagina home
+			 }else {
+				return "redirect:/";
+			}
+			 
+	     //Si no esta presente (existe) el usuario 
+		 }else {
+			 logger.info("Usuario no existe");
+		 }
+		 
+		  return "redirect:/";
+	  }
 
 }
