@@ -24,12 +24,11 @@
 
 <body>
 
-	<!-- Navigation -->
-	<div th:include="usuario/template_usuario.html::header">
+<!-- Navigation -->                                   <!-- Si la session que se esta enviando desde el homecontrolle si sessionr es = a null mostrara este header-->  
+	<div th:include="usuario/template_usuario.html::header" th:if="${sesion==null}"></div>
+														                  <!-- Si no es ()unless) es una expresion de tymleaf si no es null me muestre este header es cuando el usuario ya esta logeado -->  
+	<div th:include="usuario/template_usuario.html::header-user" th:unless="${sesion==null}"></div>
 
-	</div>
-	<!-- Page Content -->
-	<div class="container">
 
 
 		<!-- Page Heading/Breadcrumbs -->
