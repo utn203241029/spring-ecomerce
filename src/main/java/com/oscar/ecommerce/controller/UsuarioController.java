@@ -1,5 +1,6 @@
 package com.oscar.ecommerce.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.oscar.ecommerce.model.Orden;
 import com.oscar.ecommerce.model.Usuario;
+import com.oscar.ecommerce.service.IOrdenService;
 import com.oscar.ecommerce.service.IUsuarioService;
 
 @Controller
@@ -25,6 +28,9 @@ public class UsuarioController {
 	//Para accerder al tema de operacion crud es el archivo UsuarioServiceImpl
 	 @Autowired 
 	 private IUsuarioService usuarioService;
+	 
+	 @Autowired
+	 private IOrdenService ordenService;
 	 
 	 // /usuario/registro
 	 @GetMapping("/registro")
@@ -83,6 +89,10 @@ public class UsuarioController {
 	 @GetMapping("/compras")
 	 public String obtenerCompras(Model model, HttpSession session) {
 		 model.addAttribute("sesion", session.getAttribute("idusuario"));
+		Usuario usuario= usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+		 List<Orden> ordenes =  ordenService.findByUsuario(usuario);
+		 
+		 model.addAttribute("ordenes", ordenes);
 		 return "usuario/compras";
 	 }
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oscar.ecommerce.model.Orden;
+import com.oscar.ecommerce.model.Usuario;
 import com.oscar.ecommerce.repository.IOrdenRepository;
 
 @Service
@@ -63,6 +64,12 @@ public class OrdenServiceImpl implements IOrdenService{
 		}
 		
 		return numeroConcatenado;
+	}
+
+	@Override
+	public List<Orden> findByUsuario(Usuario usuario) {
+		// Con este nos deberia obtener las ordenes por usuario
+		return OrdenRepository.findByUsuario(usuario);
 	}
 
 }
