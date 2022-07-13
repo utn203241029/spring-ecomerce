@@ -29,7 +29,6 @@ public class ProductoServiceImpl implements ProductoService{
 
 	@Override
 	public void update(Producto producto) {
-		
 		iProductoRepository.save(producto);
 		
 	}
